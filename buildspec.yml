@@ -1,0 +1,33 @@
+version: 0.2
+
+env:
+  variables:
+    ARTIFACT: 'python-starter'
+
+phases:
+  install:
+    commands:
+      - echo Installing dependencies
+      - pip install pipenv
+
+  pre_build:
+    commands:
+      - echo Starting build for $ARTIFACT
+      - make install-dev
+
+  build:
+    commands:
+      - echo Build started
+      - make test
+
+  post_build:
+    commands:
+      # so the package step has a clean virtualenv with no test dependencies
+      - make clean install
+
+artifacts:
+#  discard-paths: true
+  files:
+    - '*.py'
+    - '$(pipenv --venv)/lib/python3.6/site-packages/**/*'
+  name: '${$ARTIFACT}.zip'

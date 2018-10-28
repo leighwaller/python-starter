@@ -1,10 +1,10 @@
 # Update this to give whichever name you want. This may be set on the command line:
 # > make build OUT_FILE=./outfile.zip
-OUT_FILE?=./dist/python-starter.zip
+BUILD_ARTIFACT?=./dist/python-starter.zip
 
 ### Below this point it should not need to be changed
 # get absolute path of zipfile to deliver
-ARTIFACT=$(abspath $(OUT_FILE))
+ARTIFACT=$(abspath $(BUILD_ARTIFACT))
 
 # Install all the libs locally
 install:
@@ -21,16 +21,15 @@ uninstall:
 run:
 	pipenv run python ./handler.py
 
-# Clean delivrable
+# Clean artifacts
 clean:
-	rm -f ${ARTIFACT}
+	rm -rf dist/*
 
-test: install-dev
+test:
 	pipenv run py.test
 
 # Rebuild the artifact
-package: clean install
+package:
 	$(eval VENV = $(shell pipenv --venv))
 	cd ${VENV}/lib/python3.6/site-packages && zip -r9 ${ARTIFACT} ./*
 	zip -r9 ${ARTIFACT} *.py -x tests
-
