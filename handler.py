@@ -1,5 +1,5 @@
-import boto3
+import json
 
 
 def handle(event, context):
-    print('hello')
+    print(json.dumps(event))
